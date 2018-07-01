@@ -68,6 +68,7 @@ static float linux_cputemp(int core)
 		tc/=2;
 	}
 	fclose(fd);
+	fclose(fd2);
 	return tc;
 }
 
