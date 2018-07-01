@@ -14,7 +14,9 @@
 #ifndef WIN32
 
 #define HWMON_PATH \
- "/sys/devices/virtual/thermal/thermal_zone3/temp"
+ "/sys/devices/virtual/thermal/thermal_zone0/temp"
+#define HWMON_PATH2 \
+ "/sys/devices/virtual/thermal/thermal_zone1/temp"
 #define HWMON_ALT \
  "/sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_input"
 #define HWMON_ALT2 \
@@ -35,6 +37,7 @@ static float linux_cputemp(int core)
 {
 	float tc = 0.0;
 	FILE *fd = fopen(HWMON_PATH, "r");
+	FILE *fd2 = fopen(HWMON_PATH2, "r");
 	uint32_t val = 0;
 
 	if (!fd)
@@ -59,8 +62,11 @@ static float linux_cputemp(int core)
 		return tc;
 
 	if (fscanf(fd, "%d", &val))
-		tc = val / 1000.0;
-
+		tc = val ;
+	if (fscanf(fd2, "%d", &val)){
+		tc+= val;
+		tc/=2;
+	}
 	fclose(fd);
 	return tc;
 }
