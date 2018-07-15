@@ -37,7 +37,6 @@ static float linux_cputemp(int core)
 {
 	float tc = 0.0;
 	FILE *fd = fopen(HWMON_PATH, "r");
-	FILE *fd2 = fopen(HWMON_PATH2, "r");
 	uint32_t val = 0;
 
 	if (!fd)
@@ -63,12 +62,7 @@ static float linux_cputemp(int core)
 
 	if (fscanf(fd, "%d", &val))
 		tc = val ;
-	if (fscanf(fd2, "%d", &val)){
-		tc+= val;
-		tc/=2;
-	}
 	fclose(fd);
-	fclose(fd2);
 	return tc;
 }
 
